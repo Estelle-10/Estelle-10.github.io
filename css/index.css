@@ -5634,6 +5634,14 @@ figure.highlight pre .javascript .function {
 .katex.katex-show {
   display: inline;
 }
+.katex-display,
+mjx-container {
+  scrollbar-width: none;
+}
+.katex-display::-webkit-scrollbar,
+mjx-container::-webkit-scrollbar {
+  display: none;
+}
 mjx-container {
   overflow-x: auto;
   overflow-y: hidden;
