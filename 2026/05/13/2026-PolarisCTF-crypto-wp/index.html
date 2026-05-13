@@ -1,0 +1,190 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>2026-PolarisCTF-crypto-wp | Estelle's Blog</title><meta name="author" content="Estelle"><meta name="copyright" content="Estelle"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="随便写几笔复盘一下 神秘学: 确实很神秘，本来不知道怎么做的。后来有师傅提醒我说试试poly(x1)&#x3D;0,然后我就觉得这确实比较需要数学直觉，也提醒我们AI时代下也要多自己动脑子，倒不是真的想多难的问题，但是在这种小细节上明明人是肯定可以感觉出来的 我也开始反思为什么太过依赖AI，为什么不去自己看看源代码，不去自己感受一下 今天下午再复现的时候发现，k很小，所以其实可以爆破一下，看看有没有能解出来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026-PolarisCTF-crypto-wp">
+<meta property="og:url" content="https://estelle.xin/2026/05/13/2026-PolarisCTF-crypto-wp/index.html">
+<meta property="og:site_name" content="Estelle&#39;s Blog">
+<meta property="og:description" content="随便写几笔复盘一下 神秘学: 确实很神秘，本来不知道怎么做的。后来有师傅提醒我说试试poly(x1)&#x3D;0,然后我就觉得这确实比较需要数学直觉，也提醒我们AI时代下也要多自己动脑子，倒不是真的想多难的问题，但是在这种小细节上明明人是肯定可以感觉出来的 我也开始反思为什么太过依赖AI，为什么不去自己看看源代码，不去自己感受一下 今天下午再复现的时候发现，k很小，所以其实可以爆破一下，看看有没有能解出来">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://estelle.xin/img/bg.jpg">
+<meta property="article:published_time" content="2026-05-13T07:11:03.000Z">
+<meta property="article:modified_time" content="2026-05-13T07:26:03.001Z">
+<meta property="article:author" content="Estelle">
+<meta property="article:tag" content="Crypto">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://estelle.xin/img/bg.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "2026-PolarisCTF-crypto-wp",
+  "url": "https://estelle.xin/2026/05/13/2026-PolarisCTF-crypto-wp/",
+  "image": "https://estelle.xin/img/bg.jpg",
+  "datePublished": "2026-05-13T07:11:03.000Z",
+  "dateModified": "2026-05-13T07:26:03.001Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Estelle",
+      "url": "https://estelle.xin"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://estelle.xin/2026/05/13/2026-PolarisCTF-crypto-wp/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '2026-PolarisCTF-crypto-wp',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.1"></head><body><div class="bg-animation" id="web_bg" style="background-image: url(/url(/img/bg.png));"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/CTF/"><i class="fa-fw fas fa-trophy"></i><span> CTF</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Estelle's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">2026-PolarisCTF-crypto-wp</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/CTF/"><i class="fa-fw fas fa-trophy"></i><span> CTF</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">2026-PolarisCTF-crypto-wp</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-13T07:11:03.000Z" title="发表于 2026-05-13 15:11:03">2026-05-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-13T07:26:03.001Z" title="更新于 2026-05-13 15:26:03">2026-05-13</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CTF/">CTF</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>随便写几笔复盘一下<br>
+神秘学:<br>
+确实很神秘，本来不知道怎么做的。后来有师傅提醒我说试试poly(x1)=0,然后我就觉得这确实比较需要数学直觉，也提醒我们AI时代下也要多自己动脑子，倒不是真的想多难的问题，但是在这种小细节上明明人是肯定可以感觉出来的<br>
+我也开始反思为什么太过依赖AI，为什么不去自己看看源代码，不去自己感受一下<br>
+今天下午再复现的时候发现，k很小，所以其实可以爆破一下，看看有没有能解出来的c即可。这个思路似乎更常见，唉…确实需要多多夯实一下基础</p>
+<p>RSA_LCG:<br>
+容器只有4s的限制，常规的算法肯定不行，积攒了经验：要多多上网（如github）等搜搜开源的更快的算法<br>
+比如本题的flint，2026ACTF pandra的flatter构造格，SUCTF也有一些,等等…</p>
+<p>ez_random:<br>
+本来脚本每次连接都要恢复一遍A的序列很慢很烦，后来看到了庄三梦师傅的博客：<a target="_blank" rel="noopener" href="https://www.zhuangsanmeng.xyz/posts/polarisctf2026/#ez_random">https://www.zhuangsanmeng.xyz/posts/polarisctf2026/#ez_random</a><br>
+才恍然大悟：源代码里早已说明</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set_random_seed(<span class="built_in">int</span>.from_bytes(SEED, <span class="string">&#x27;big&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<p>seed是远端固定的，也就是说同一个容器seed一样，那么shuffle之后A的序列也一样，所以每次应该把恢复好的A序列保存在本地，这样就算有报错后面也不用每次都重新跑一遍，而是可以直接用，大大节约时间</p>
+<p>以上就是一些随笔，给自己的Cry之路积攒了宝贵的经验</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://estelle.xin">Estelle</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://estelle.xin/2026/05/13/2026-PolarisCTF-crypto-wp/">https://estelle.xin/2026/05/13/2026-PolarisCTF-crypto-wp/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://estelle.xin" target="_blank">Estelle's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Crypto/">Crypto</a></div><div class="post-share"><div class="social-share" data-image="/img/bg.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/03/20/2026-VNCTF-crypto-writeup/" title="2026-VNCTF-crypto-writeup"><img class="cover" src="/img/bg.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">2026-VNCTF-crypto-writeup</div></div><div class="info-2"><div class="info-item-1">Crypto 方向 题目1：math_rsa 需要对等式左边进行化简,有： (x2+1)(y2+1)=(x−y)2+(xy+1)2(x^2 + 1)(y^2 + 1) = (x - y)^2 + (xy + 1)^2 (x2+1)(y2+1)=(x−y)2+(xy+1)2 接着，将 (xy+1)2(xy + 1)^2(xy+1)2 展开并改写为含有 (xy−1)2(xy - 1)^2(xy−1)2 的形式： (xy+1)2=(xy−1)2+4xy(xy + 1)^2 = (xy - 1)^2 + 4xy (xy+1)2=(xy−1)2+4xy 将上述两个结论代入原等式的左边，替换掉 (x2+1)(y2+1)(x^2 + 1)(y^2 + 1)(x2+1)(y2+1)： (x−y)2+(xy−1)2+4xy−2(x−y)(xy−1)=4k+4xy(x - y)^2 + (xy - 1)^2 + 4xy - 2(x - y)(xy - 1) = 4k + 4xy (x−y)2+(xy−1)2+4xy−2(x−y)(xy−1)=4k+4xy 等式两边同时消去 4xy4xy4xy： (x...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/02/12/2026-SHCTF-crypto-Writeup/" title="2026—SHCTF-crypto-Writeup"><img class="cover" src="/img/bg.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-12</div><div class="info-item-2">2026—SHCTF-crypto-Writeup</div></div><div class="info-2"><div class="info-item-1">Crypto 方向 题目1：阶段1-AES的诞生 Step 1. 源代码审计  结合题目名字和多出来的附件，采用AES被官方发布的时间2001-11-26，然后换成Unix时间戳，得到key Step 2. 读取data.txt，运行exp拿到flag exp： 123456789101112131415161718192021222324252627282930313233343536import refrom binascii import unhexlifyfrom cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modesfrom cryptography.hazmat.primitives import padding# 1) 从 data.txt 读 iv 和密文with open(&quot;data.txt&quot;, &quot;r&quot;, encoding=&quot;utf-8&quot;) as f:    lines = f.read().splitlines()...</div></div></div></a><a class="pagination-related" href="/2026/03/20/2026-VNCTF-crypto-writeup/" title="2026-VNCTF-crypto-writeup"><img class="cover" src="/img/bg.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-20</div><div class="info-item-2">2026-VNCTF-crypto-writeup</div></div><div class="info-2"><div class="info-item-1">Crypto 方向 题目1：math_rsa 需要对等式左边进行化简,有： (x2+1)(y2+1)=(x−y)2+(xy+1)2(x^2 + 1)(y^2 + 1) = (x - y)^2 + (xy + 1)^2 (x2+1)(y2+1)=(x−y)2+(xy+1)2 接着，将 (xy+1)2(xy + 1)^2(xy+1)2 展开并改写为含有 (xy−1)2(xy - 1)^2(xy−1)2 的形式： (xy+1)2=(xy−1)2+4xy(xy + 1)^2 = (xy - 1)^2 + 4xy (xy+1)2=(xy−1)2+4xy 将上述两个结论代入原等式的左边，替换掉 (x2+1)(y2+1)(x^2 + 1)(y^2 + 1)(x2+1)(y2+1)： (x−y)2+(xy−1)2+4xy−2(x−y)(xy−1)=4k+4xy(x - y)^2 + (xy - 1)^2 + 4xy - 2(x - y)(xy - 1) = 4k + 4xy (x−y)2+(xy−1)2+4xy−2(x−y)(xy−1)=4k+4xy 等式两边同时消去 4xy4xy4xy： (x...</div></div></div></a><a class="pagination-related" href="/2026/02/13/2026-furryCTF-crypto-writeup/" title="2026-furryCTF-crypto-writeup"><img class="cover" src="/img/bg.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-13</div><div class="info-item-2">2026-furryCTF-crypto-writeup</div></div><div class="info-2"><div class="info-item-1">Crypto 方向 题目1：GZRSA 审计一下源代码，发现N是仅由flag作为seed生成的，所以是一直不变的，只有e每次打开容器时会根据时间戳变化 N不变，可以用共模攻击，但是需要开两次容器拿到两组数据 最后的结果是：furryCTF{ee74fc3b0b4d_E4SY_RS4_wIth_G2cTf_FRaM3wOrK} 题目2：0x4A 需要找个网站用0x4A做秘钥连续解密3次，最后得到：POFP{2394E9DA555D55D493A28624D901D2CA} 但是写wp的时候找不到那个网站了，当时也没记录 题目3：你是说这是个数学题？ 这题在比赛时是PPC板块的，但是应该算是密码题 初始数据：flag的二进制用列表表示，还有一个单位矩阵，对角线全是1 题目做了很多次线性变换，每次做的变换是，在矩阵随机取两个不同的行做异或，然后对二进制列表中相同的元素进行同样的操作 最后得到变化之后的matrix和result 看似很复杂，但是都是线性的，并且每次变换前后的元素都是一一对应的，一定是可逆的 最后逆出来的初始flag二进制直接转码不对，是因为在最开始把flag明文变成二进...</div></div></div></a><a class="pagination-related" href="/2026/03/12/2026-SparkCTF-crypto-writeup/" title="2026-SparkCTF-crypto-writeup"><img class="cover" src="/img/bg.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-12</div><div class="info-item-2">2026-SparkCTF-crypto-writeup</div></div><div class="info-2"><div class="info-item-1">Crypto 方向 初赛部分 题目1：寻找戒指的旅途 让AI帮我静态分析了一下，发现是PyInstaller 打包的 Python 程序，让他帮我解一下PyInstaller包并反编译出pyc，看到了加密原理： c≡(m∗iv)mod  sc \equiv (m * iv) \mod s c≡(m∗iv)mods 接下来很简单，由output.json里的两组m，iv，c做一个gcd先恢复出模数s，然后根据最后一组的iv，c计算m exp： 123456789101112131415161718192021222324252627import jsonimport mathfrom Crypto.Util.number import long_to_byteswith open(&quot;output.json&quot;, &quot;r&quot;, encoding=&quot;utf-8&quot;) as f:    obj = json.load(f)# 通过已知样本恢复模数 st = []for row in obj[&quot;data&quot;]:    m...</div></div></div></a><a class="pagination-related" href="/2026/03/09/2026-DesCTF-crypto-writeup/" title="2026-DesCTF-crypto-writeup"><img class="cover" src="/img/bg.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-09</div><div class="info-item-2">2026-DesCTF-crypto-writeup</div></div><div class="info-2"><div class="info-item-1">Crypto 方向 题目1：签到 不知道那串疑似base32的密文什么意思，在Google地图输入坐标发现是卡塔尔的一个空军基地，然后结合2-28的日期，搜索新闻能找到真实承诺4 ps：这题出得何意味？？？ 题目2：check in 在源代码中，d的生成是在RR上的，也就是RealField(53),是53-bit的双精度浮点数，那么之后用Integar转回整数的时候就只保留了高53位bit的数据 这一点在python中也可以直接实现，进而恢复d，然后利用ed和phi的关系可以得出phi，再结合N=p*q解二元方程得到p和q，之后md5得到flag exp： 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162import mathfrom hashlib import md5# 题目提供的已知信息e = 20285928988408708385825788658664300305494782819689...</div></div></div></a><a class="pagination-related" href="/2026/02/13/2026-%E6%98%A5%E7%A7%8B%E6%9D%AF%E5%86%AC%E5%AD%A3%E8%B5%9B-crypto-Writeup/" title="2026-春秋杯冬季赛-crypto-Writeup"><img class="cover" src="/img/bg.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-02-13</div><div class="info-item-2">2026-春秋杯冬季赛-crypto-Writeup</div></div><div class="info-2"><div class="info-item-1">Crypto 方向 题目1：ez_lcg </div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Estelle</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/05/13/2026-PolarisCTF-crypto-wp/" title="2026-PolarisCTF-crypto-wp"><img src="/img/bg.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2026-PolarisCTF-crypto-wp"/></a><div class="content"><a class="title" href="/2026/05/13/2026-PolarisCTF-crypto-wp/" title="2026-PolarisCTF-crypto-wp">2026-PolarisCTF-crypto-wp</a><time datetime="2026-05-13T07:11:03.000Z" title="发表于 2026-05-13 15:11:03">2026-05-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/03/20/2026-VNCTF-crypto-writeup/" title="2026-VNCTF-crypto-writeup"><img src="/img/bg.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2026-VNCTF-crypto-writeup"/></a><div class="content"><a class="title" href="/2026/03/20/2026-VNCTF-crypto-writeup/" title="2026-VNCTF-crypto-writeup">2026-VNCTF-crypto-writeup</a><time datetime="2026-03-20T10:56:57.000Z" title="发表于 2026-03-20 18:56:57">2026-03-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/03/12/2026-SparkCTF-crypto-writeup/" title="2026-SparkCTF-crypto-writeup"><img src="/img/bg.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2026-SparkCTF-crypto-writeup"/></a><div class="content"><a class="title" href="/2026/03/12/2026-SparkCTF-crypto-writeup/" title="2026-SparkCTF-crypto-writeup">2026-SparkCTF-crypto-writeup</a><time datetime="2026-03-12T11:22:22.000Z" title="发表于 2026-03-12 19:22:22">2026-03-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/03/09/2026-DesCTF-crypto-writeup/" title="2026-DesCTF-crypto-writeup"><img src="/img/bg.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2026-DesCTF-crypto-writeup"/></a><div class="content"><a class="title" href="/2026/03/09/2026-DesCTF-crypto-writeup/" title="2026-DesCTF-crypto-writeup">2026-DesCTF-crypto-writeup</a><time datetime="2026-03-09T11:29:52.000Z" title="发表于 2026-03-09 19:29:52">2026-03-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/13/2026-furryCTF-crypto-writeup/" title="2026-furryCTF-crypto-writeup"><img src="/img/bg.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2026-furryCTF-crypto-writeup"/></a><div class="content"><a class="title" href="/2026/02/13/2026-furryCTF-crypto-writeup/" title="2026-furryCTF-crypto-writeup">2026-furryCTF-crypto-writeup</a><time datetime="2026-02-13T03:51:54.000Z" title="发表于 2026-02-13 11:51:54">2026-02-13</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Estelle</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>
